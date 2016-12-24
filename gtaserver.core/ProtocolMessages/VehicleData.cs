@@ -1,43 +1,42 @@
 ﻿using System.Collections.Generic;
-using System.Numerics;
-using ProtoBuf;
+using ZeroFormatter;
 
 namespace GTAServer.ProtocolMessages
 {
-    [ProtoContract]
+    [ZeroFormattable]
     public class VehicleData
     {
-        [ProtoMember(1)]
-        public long Id { get; set; }
-        [ProtoMember(2)]
-        public string Name { get; set; }
-        [ProtoMember(3)]
-        public int VehicleModelHash { get; set; }
-        [ProtoMember(4)]
-        public int PedModelHash { get; set; }
-        [ProtoMember(5)]
-        public int PrimaryColor { get; set; }
-        [ProtoMember(6)]
-        public int SecondaryColor { get; set; }
-        [ProtoMember(7)]
-        public Vector3 Position { get; set; }
-        [ProtoMember(8)]
-        public Quaternion Quaternion { get; set; }
-        [ProtoMember(9)]
-        public int VehicleSeat { get; set; }
-        [ProtoMember(10)]
-        public int VehicleHealth { get; set; }
-        [ProtoMember(11)]
-        public int PlayerHealth { get; set; }
-        [ProtoMember(12)]
-        public float Latency { get; set; }
-        [ProtoMember(13)]
-        public Dictionary<int, int> VehicleMods { get; set; }
-        [ProtoMember(14)]
-        public bool IsPressingHorn { get; set; }
-        [ProtoMember(15)]
-        public bool IsSirenActive { get; set; }
-        [ProtoMember(16)]
-        public float Speed { get; set; }
+        [Index(1)]
+        public virtual long Id { get; set; }
+        [Index(2)]
+        public virtual string Name { get; set; }
+        [Index(3)]
+        public virtual int VehicleModelHash { get; set; }
+        [Index(4)]
+        public virtual int PedModelHash { get; set; }
+        [Index(5)]
+        public virtual int PrimaryColor { get; set; }
+        [Index(6)]
+        public virtual int SecondaryColor { get; set; }
+        [Index(7)]
+        public virtual Vector3 Position { get; set; }
+        [Index(8)]
+        public virtual Quaternion Quaternion { get; set; }
+        [Index(9)]
+        public virtual int VehicleSeat { get; set; }
+        [Index(10)]
+        public virtual int VehicleHealth { get; set; }
+        [Index(11)]
+        public virtual int PlayerHealth { get; set; }
+        [Index(12)]
+        public virtual float Latency { get; set; }
+        [Index(13)]
+        public virtual Dictionary<int, int> VehicleMods { get; set; }
+        [Index(14)]
+        public virtual bool IsPressingHorn { get; set; }
+        [Index(15)]
+        public virtual bool IsSirenActive { get; set; }
+        [Index(16)]
+        public virtual float Speed { get; set; }
     }
 }

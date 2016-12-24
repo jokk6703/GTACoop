@@ -12,7 +12,8 @@
     "Microsoft.Extensions.Logging.Debug": "1.0.0",
     "protobuf-net": "2.1.0",
     "System.Runtime.Loader": "4.3.0",
-    "SimpleConsoleLogger": "1.0.2"
+    "SimpleConsoleLogger": "1.0.2",
+    "ZeroFormatter": "1.5.7"
   },
   "frameworks": {
     "netcoreapp1.0": {

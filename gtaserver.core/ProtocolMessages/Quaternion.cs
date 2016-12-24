@@ -1,15 +1,16 @@
-using ProtoBuf;
+using ZeroFormatter;
 
-namespace GTAServer.ProtocolMessages {
-    [ProtoContract]
+namespace GTAServer.ProtocolMessages
+{
+    [ZeroFormattable]
     public class Quaternion {
-        [ProtoMember(1)]
-        public float X { get; set; }
-        [ProtoMember(2)]
-        public float Y { get; set; }
-        [ProtoMember(3)]
-        public float Z { get; set; }
-        [ProtoMember(4)]
-        public float W { get; set; }
+        [Index(1)]
+        public virtual float X { get; set; }
+        [Index(2)]
+        public virtual float Y { get; set; }
+        [Index(3)]
+        public virtual float Z { get; set; }
+        [Index(4)]
+        public virtual float W { get; set; }
     }
 }

@@ -1,8 +1,8 @@
-﻿using ProtoBuf;
+﻿using ZeroFormatter;
 
 namespace GTAServer.ProtocolMessages
 {
-    [ProtoContract]
+    [ZeroFormattable]
     public class Vector3
     {
         public Vector3()
@@ -21,17 +21,17 @@ namespace GTAServer.ProtocolMessages
         /// <summary>
         /// X
         /// </summary>
-        [ProtoMember(1)]
-        public float X { get; set; }
+        [Index(1)]
+        public virtual float X { get; set; }
         /// <summary>
         /// Y
         /// </summary>
-        [ProtoMember(2)]
-        public float Y { get; set; }
+        [Index(2)]
+        public virtual float Y { get; set; }
         /// <summary>
         /// Z
         /// </summary>
-        [ProtoMember(3)]
-        public float Z { get; set; }
+        [Index(3)]
+        public virtual float Z { get; set; }
     }
 }

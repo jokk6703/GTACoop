@@ -1,44 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ProtoBuf;
+﻿using System.Collections.Generic;
+
+using ZeroFormatter;
 
 // I'm just going to keep any natives-related code here.
 namespace GTAServer.ProtocolMessages
 {
-    [ProtoContract]
+    [ZeroFormattable]
     public class NativeResponse
     {
-        [ProtoMember(1)]
-        public NativeArgument Response { get; set; }
-        [ProtoMember(2)]
-        public string Id { get; set; }
+        [Index(1)]
+        public virtual NativeArgument Response { get; set; }
+        [Index(2)]
+        public virtual string Id { get; set; }
     }
 
-    [ProtoContract]
+    [ZeroFormattable]
     public class NativeTickCall
     {
-        [ProtoMember(1)]
-        public NativeData Native { get; set; }
-        [ProtoMember(2)]
-        public string Id { get; set; }
+        [Index(1)]
+        public virtual NativeData Native { get; set; }
+        [Index(2)]
+        public virtual string Id { get; set; }
     }
 
-    [ProtoContract]
+    [ZeroFormattable]
     public class NativeData
     {
-        [ProtoMember(1)]
-        public ulong Hash { get; set; }
-        [ProtoMember(2)]
-        public List<NativeArgument> Arguments { get; set; }
-        [ProtoMember(3)]
-        public NativeArgument ReturnType { get; set; }
-        [ProtoMember(4)]
-        public string Id { get; set; }
+        [Index(1)]
+        public virtual ulong Hash { get; set; }
+        [Index(2)]
+        public virtual List<NativeArgument> Arguments { get; set; }
+        [Index(3)]
+        public virtual NativeArgument ReturnType { get; set; }
+        [Index(4)]
+        public virtual string Id { get; set; }
     }
 
-    [ProtoContract]
+    [ZeroFormattable]
+    // TODO: ZeroFormatter.UnionAttribute on these
+    /*
     [ProtoInclude(2, typeof(IntArgument))]
     [ProtoInclude(3, typeof(UIntArgument))]
     [ProtoInclude(4, typeof(StringArgument))]
@@ -46,65 +46,65 @@ namespace GTAServer.ProtocolMessages
     [ProtoInclude(6, typeof(BooleanArgument))]
     [ProtoInclude(7, typeof(LocalPlayerArgument))]
     [ProtoInclude(8, typeof(Vector3Argument))]
-    [ProtoInclude(9, typeof(LocalGamePlayerArgument))]
+    [ProtoInclude(9, typeof(LocalGamePlayerArgument))]*/
     public class NativeArgument
     {
-        [ProtoMember(1)]
-        public string Id { get; set; }
+        [Index(1)]
+        public virtual string Id { get; set; }
     }
 
-    [ProtoContract]
+    [ZeroFormattable]
     public class IntArgument : NativeArgument
     {
-        [ProtoMember(1)]
-        public int Data { get; set; }
+        [Index(1)]
+        public virtual int Data { get; set; }
     }
 
-    [ProtoContract]
+    [ZeroFormattable]
     public class UIntArgument : NativeArgument
     {
-        [ProtoMember(1)]
-        public uint Data { get; set; }
+        [Index(1)]
+        public virtual uint Data { get; set; }
     }
 
-    [ProtoContract]
+    [ZeroFormattable]
     public class StringArgument : NativeArgument
     {
-        [ProtoMember(1)]
-        public string Data { get; set; }
+        [Index(1)]
+        public virtual string Data { get; set; }
     }
 
-    [ProtoContract]
+    [ZeroFormattable]
     public class FloatArgument : NativeArgument
     {
-        [ProtoMember(1)]
-        public float Data { get; set; }
+        [Index(1)]
+        public virtual float Data { get; set; }
     }
 
-    [ProtoContract]
+    [ZeroFormattable]
     public class BooleanArgument : NativeArgument
     {
-        [ProtoMember(1)]
-        public bool Data { get; set; }
+        [Index(1)]
+        public virtual bool Data { get; set; }
     }
 
-    [ProtoContract]
+    [ZeroFormattable]
     public class Vector3Argument : NativeArgument
     {
-        [ProtoMember(1)]
-        public float X { get; set; }
-        [ProtoMember(2)]
-        public float Y { get; set; }
-        [ProtoMember(3)]
-        public float Z { get; set; }
+        [Index(1)]
+        public virtual float X { get; set; }
+        [Index(2)]
+        public virtual float Y { get; set; }
+        [Index(3)]
+        public virtual float Z { get; set; }
     }
 
-    [ProtoContract]
+    [ZeroFormattable]
     public class LocalPlayerArgument : NativeArgument
     {        
     }
 
-    [ProtoContract]
+    [ZeroFormattable]
     public class LocalGamePlayerArgument : NativeArgument
     {
     }

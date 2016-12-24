@@ -1,36 +1,36 @@
 using System.Collections.Generic;
-using ProtoBuf;
+using ZeroFormatter;
 
 namespace GTAServer.ProtocolMessages {
-    [ProtoContract]
+    [ZeroFormattable]
     public class PedData {
-        [ProtoMember(1)]
-        public long Id { get;set; }
-        [ProtoMember(2)]
-        public string Name { get; set; }
-        [ProtoMember(3)]
-        public int PedModelHash { get; set; }
-        [ProtoMember(4)]
-        public Vector3 Position { get; set; }
-        [ProtoMember(5)]
-        public Quaternion Quaternion { get; set; }
-        [ProtoMember(6)]
-        public bool IsJumping { get; set; }
-        [ProtoMember(7)]
-        public bool IsShooting { get; set; }
-        [ProtoMember(8)]
-        public bool IsAiming { get; set; }
-        [ProtoMember(9)]
-        public Vector3 AimCoords { get; set; }
-        [ProtoMember(10)]
-        public int WeaponHash { get; set; }
-        [ProtoMember(11)]
-        public int PlayerHealth { get; set; }
-        [ProtoMember(12)]
-        public float Latency { get; set; }
-        [ProtoMember(13)]
-        public Dictionary<int,int> PedProps { get; set; }
-        [ProtoMember(14)]
-        public bool IsParachuteOpen { get; set; }
+        [Index(1)]
+        public virtual long Id { get;set; }
+        [Index(2)]
+        public virtual string Name { get; set; }
+        [Index(3)]
+        public virtual int PedModelHash { get; set; }
+        [Index(4)]
+        public virtual Vector3 Position { get; set; }
+        [Index(5)]
+        public virtual Quaternion Quaternion { get; set; }
+        [Index(6)]
+        public virtual bool IsJumping { get; set; }
+        [Index(7)]
+        public virtual bool IsShooting { get; set; }
+        [Index(8)]
+        public virtual bool IsAiming { get; set; }
+        [Index(9)]
+        public virtual Vector3 AimCoords { get; set; }
+        [Index(10)]
+        public virtual int WeaponHash { get; set; }
+        [Index(11)]
+        public virtual int PlayerHealth { get; set; }
+        [Index(12)]
+        public virtual float Latency { get; set; }
+        [Index(13)]
+        public virtual Dictionary<int,int> PedProps { get; set; }
+        [Index(14)]
+        public virtual bool IsParachuteOpen { get; set; }
     }
 }

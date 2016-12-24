@@ -10,6 +10,7 @@
         NpcPedPositionData = 5,
         WorldSharingStop = 6,
         DiscoveryResponse = 7,
+        // This should be the only one still using protobuf.
         ConnectionRequest = 8,
         NativeCall = 9,
         NativeResponse = 10,

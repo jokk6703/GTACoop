@@ -1,11 +1,11 @@
-﻿using ProtoBuf;
+﻿using ZeroFormatter;    
 
 namespace GTAServer.ProtocolMessages
 {
-    [ProtoContract]
+    [ZeroFormattable]
     public class PlayerDisconnect
     {
-        [ProtoMember(1)]
+        [Index(1)]
         public long Id { get; set; }
     }
 }

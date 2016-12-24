@@ -1,21 +1,21 @@
-﻿using ProtoBuf;
+﻿using ZeroFormatter;
 
 namespace GTAServer.ProtocolMessages
 {
-    [ProtoContract]
+    [ZeroFormattable]
     public class DiscoveryResponse
     {
-        [ProtoMember(1)]
-        public string ServerName { get; set; }
-        [ProtoMember(2)]
-        public int MaxPlayers { get; set; }
-        [ProtoMember(3)]
-        public int PlayerCount { get; set; }
-        [ProtoMember(4)]
-        public bool PasswordProtected { get; set; }
-        [ProtoMember(5)]
-        public int Port { get; set; }
-        [ProtoMember(6)]
-        public string Gamemode { get; set; }
+        [Index(1)]
+        public virtual string ServerName { get; set; }
+        [Index(2)]
+        public virtual int MaxPlayers { get; set; }
+        [Index(3)]
+        public virtual int PlayerCount { get; set; }
+        [Index(4)]
+        public virtual bool PasswordProtected { get; set; }
+        [Index(5)]
+        public virtual int Port { get; set; }
+        [Index(6)]
+        public virtual string Gamemode { get; set; }
     }
 }
