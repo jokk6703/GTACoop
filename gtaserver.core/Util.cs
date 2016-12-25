@@ -6,6 +6,7 @@ namespace GTAServer
 {
     public class Util
     {
+        /// <summary>Deprecated. See ZeroFormatterSerializer.Deserialize<I>(byte[])</summary>
         public static T DeserializeBinary<T>(byte[] data)
         {
             using (var stream = new MemoryStream(data))
@@ -14,6 +15,7 @@ namespace GTAServer
             }
         }
 
+        /// <summary>Deprecated. See ZeroFormatterSerializer.Serialize(object)</summary>
         public static byte[] SerializeBinary(object data)
         {
             using (var stream = new MemoryStream())
