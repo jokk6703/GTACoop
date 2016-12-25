@@ -37,7 +37,7 @@ namespace GTAServer
         public bool AnnounceSelf { get; set; }
         public bool AllowNicknames { get; set; }
         public bool AllowOutdatedClients { get; set; }
-        public readonly ScriptVersion ServerVersion = ScriptVersion.VERSION_0_9_3;
+        public readonly ScriptVersion ServerVersion = ScriptVersion.VERSION_1_0_0;
         public string LastKickedIP { get; set; }
         public Client LastKickedClient { get; set; }
         public bool DebugMode { get; set; }
@@ -321,8 +321,9 @@ namespace GTAServer
                 $"New connection request: {client.DisplayName}@{msg.SenderEndPoint.Address.ToString()} | Game version: {client.GameVersion.ToString()} | Script version: {client.RemoteScriptVersion.ToString()}");
 
             var latestScriptVersion = Enum.GetValues(typeof(ScriptVersion)).Cast<ScriptVersion>().Last();
-            if (!AllowOutdatedClients &&
-                (ScriptVersion)connReq.ScriptVersion != latestScriptVersion)
+            if ((!AllowOutdatedClients &&
+            (ScriptVersion)connReq.ScriptVersion != latestScriptVersion) 
+            || (ScriptVersion)connReq.ScriptVersion < ScriptVersion.VERSION_1_0_0)
             {
                 var latestReadableScriptVersion = latestScriptVersion.ToString();
                 latestReadableScriptVersion = Regex.Replace(latestReadableScriptVersion, "VERSION_", "",
