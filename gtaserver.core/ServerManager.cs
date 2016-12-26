@@ -6,7 +6,6 @@ using System.Linq;
 using System.Xml.Serialization;
 using Microsoft.Extensions.Logging;
 using GTAServer.PluginAPI;
-using ProtoBuf.Meta;
 using SimpleConsoleLogger;
 
 namespace GTAServer
