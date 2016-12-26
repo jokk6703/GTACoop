@@ -1,8 +1,8 @@
-using System;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace GTAServer {
+namespace GTAServer
+{
     public static class LinuxLz4Wrapper
     {
         [DllImport("liblz4.so", EntryPoint="LZ4_compress_default")]
