@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Tracing;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Reflection;
 using System.Runtime.Loader;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -450,7 +447,7 @@ namespace GTAServer
             };
             lock (Clients) discoveryResponse.PlayerCount = Clients.Count;
 
-            var serializedResponse = ZeroFormatterSerializer.Serialize(discoveryResponse);
+            var serializedResponse = Lz4Wrapper.CompressString(ZeroFormatterSerializer.Serialize(discoveryResponse));
             responsePkt.Write((int)PacketType.DiscoveryResponse);
             responsePkt.Write(serializedResponse.Length);
             responsePkt.Write(serializedResponse);
@@ -468,7 +465,7 @@ namespace GTAServer
                     {
                         // TODO: This code really could use refactoring.. right now only trying to make sure this all works on .NET Core and fixing small issues.
                         var len = msg.ReadInt32();
-                        var chatData = ZeroFormatterSerializer.Deserialize<ChatData>(msg.ReadBytes(len));
+                        var chatData = ZeroFormatterSerializer.Deserialize<ChatData>(Lz4Wrapper.DecompressString(msg.ReadBytes(len)));
                         if (chatData != null)
                         {
                             // Plugin chat handling
@@ -509,7 +506,7 @@ namespace GTAServer
                 case PacketType.VehiclePositionData:
                     {
                         var len = msg.ReadInt32();
-                        var vehicleData = ZeroFormatterSerializer.Deserialize<VehicleData>(msg.ReadBytes(len));
+                        var vehicleData = ZeroFormatterSerializer.Deserialize<VehicleData>(Lz4Wrapper.DecompressString(msg.ReadBytes(len)));
                         if (vehicleData != null)
                         {
                             var vehiclePluginResult = GameEvents.VehicleDataUpdate(client, vehicleData);
@@ -531,7 +528,7 @@ namespace GTAServer
                 case PacketType.PedPositionData:
                     {
                         var len = msg.ReadInt32();
-                        var pedPosData = ZeroFormatterSerializer.Deserialize<PedData>(msg.ReadBytes(len));
+                        var pedPosData = ZeroFormatterSerializer.Deserialize<PedData>(Lz4Wrapper.DecompressString(msg.ReadBytes(len)));
                         if (pedPosData != null)
                         {
                             var pedPluginResult = GameEvents.PedDataUpdate(client, pedPosData);
@@ -553,7 +550,7 @@ namespace GTAServer
                 case PacketType.NpcVehPositionData:
                     {
                         var len = msg.ReadInt32();
-                        var vehData = ZeroFormatterSerializer.Deserialize<VehicleData>(msg.ReadBytes(len));
+                        var vehData = ZeroFormatterSerializer.Deserialize<VehicleData>(Lz4Wrapper.DecompressString(msg.ReadBytes(len)));
 
                         if (vehData != null)
                         {
@@ -569,7 +566,7 @@ namespace GTAServer
                 case PacketType.NpcPedPositionData:
                     {
                         var len = msg.ReadInt32();
-                        var pedData = ZeroFormatterSerializer.Deserialize<PedData>(msg.ReadBytes(len));
+                        var pedData = ZeroFormatterSerializer.Deserialize<PedData>(Lz4Wrapper.DecompressString(msg.ReadBytes(len)));
                         if (pedData != null)
                         {
                             var pluginPedData = GameEvents.NpcPedDataUpdate(client, pedData);
@@ -594,7 +591,7 @@ namespace GTAServer
                 case PacketType.NativeResponse:
                     {
                         var len = msg.ReadInt32();
-                        var nativeResponse = ZeroFormatterSerializer.Deserialize<NativeResponse>(msg.ReadBytes(len));
+                        var nativeResponse = ZeroFormatterSerializer.Deserialize<NativeResponse>(Lz4Wrapper.DecompressString(msg.ReadBytes(len)));
                         if (nativeResponse == null || !_callbacks.ContainsKey(nativeResponse.Id)) return;
                         object response = nativeResponse.Response;
                         if (response is IntArgument)
@@ -663,7 +660,7 @@ namespace GTAServer
 
         public void SendToAll(object dataToSend, PacketType packetType, bool packetIsImportant)
         {
-            var data = ZeroFormatterSerializer.Serialize(dataToSend);
+            var data = Lz4Wrapper.CompressString(ZeroFormatterSerializer.Serialize(dataToSend));
             var msg = Server.CreateMessage();
             msg.Write((int)packetType);
             msg.Write(data.Length);
@@ -673,7 +670,7 @@ namespace GTAServer
 
         public void SendToAll(object dataToSend, PacketType packetType, bool packetIsImportant, Client clientToExclude)
         {
-            var data = ZeroFormatterSerializer.Serialize(dataToSend);
+            var data = Lz4Wrapper.CompressString(ZeroFormatterSerializer.Serialize(dataToSend));
             var msg = Server.CreateMessage();
             msg.Write((int)packetType);
             msg.Write(data.Length);
@@ -757,7 +754,7 @@ namespace GTAServer
                 Arguments = ParseNativeArguments(arguments)
             };
 
-            var bin = ZeroFormatterSerializer.Serialize(obj);
+            var bin = Lz4Wrapper.CompressString(ZeroFormatterSerializer.Serialize(obj));
 
             var msg = Server.CreateMessage();
 
@@ -778,7 +775,7 @@ namespace GTAServer
                 Id = null,
             };
 
-            var bin = ZeroFormatterSerializer.Serialize(obj);
+            var bin = Lz4Wrapper.CompressString(ZeroFormatterSerializer.Serialize(obj));
 
             var msg = Server.CreateMessage();
 
@@ -800,7 +797,7 @@ namespace GTAServer
             salt = Environment.TickCount.ToString() + salt + player.NetConnection.RemoteUniqueIdentifier.ToString();
             obj.Id = salt;
             obj.Arguments = ParseNativeArguments(arguments);
-            var bin = ZeroFormatterSerializer.Serialize(obj);
+            var bin = Lz4Wrapper.CompressString(ZeroFormatterSerializer.Serialize(obj));
             var msg = Server.CreateMessage();
             msg.Write((int)PacketType.NativeCall);
             msg.Write(bin.Length);
@@ -873,7 +870,7 @@ namespace GTAServer
                 Sender = sender,
                 Message = message
             };
-            var data = ZeroFormatterSerializer.Serialize(chatObj);
+            var data = Lz4Wrapper.CompressString(ZeroFormatterSerializer.Serialize(chatObj));
             var msg = Server.CreateMessage();
             msg.Write((int)PacketType.ChatData);
             msg.Write(data.Length);
