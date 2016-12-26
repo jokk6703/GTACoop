@@ -20,7 +20,11 @@ namespace GTAServer
         [DllImport("liblz4.dll", EntryPoint="LZ4_decompress_safe")]
         public static extern int decompress_safe([In] byte[] source, [Out] byte[] dest, int compressedSize, int maxDecompressedSize);
     }
+
     public static class Lz4Wrapper {
+        public static byte[] CompressString(byte[] source) {
+            return Encoding.ASCII.GetBytes(CompressString(Encoding.ASCII.GetString(source)));
+        }
         public static string CompressString(string source) {
             byte[] sourceByteArray = Encoding.ASCII.GetBytes(source);
             byte[] outArray = new byte[1024*1024];
@@ -31,6 +35,10 @@ namespace GTAServer
                 WindowsLz4Wrapper.compress_default(sourceByteArray, outArray, sourceByteArray.Length, outArray.Length);
             }
             return Encoding.ASCII.GetString(outArray).Trim('\0');
+        }
+
+        public static byte[] DecompressString(byte[] source) {
+            return Encoding.ASCII.GetBytes(DecompressString(Encoding.ASCII.GetString(source)));
         }
         public static string DecompressString(string source) {
             byte[] sourceByteArray = Encoding.ASCII.GetBytes(source);
