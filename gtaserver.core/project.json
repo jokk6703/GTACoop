@@ -2,7 +2,13 @@
   "version": "1.0.0-*",
   "buildOptions": {
     "debugType": "portable",
-    "emitEntryPoint": true
+    "emitEntryPoint": true,
+    "copyToOutput": {
+      "mappings": {
+        "liblz4.so": "native/liblz4.so.1.7.5",
+        "liblz4.dll": "native/liblz4.dll.1.7.5"
+      }
+    }
   },
   "dependencies": {
     "Lidgren.Network.Core": "8.0.30703",
@@ -13,7 +19,7 @@
     "protobuf-net": "2.1.0",
     "System.Runtime.Loader": "4.3.0",
     "SimpleConsoleLogger": "1.0.2",
-    "ZeroFormatter": "1.5.7"
+    "ZeroFormatter": "1.5.7",
   },
   "frameworks": {
     "netcoreapp1.0": {
