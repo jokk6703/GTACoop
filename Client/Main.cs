@@ -1302,7 +1302,7 @@ namespace GTACoOp
                         case PacketType.VehiclePositionData:
                             {
                                 var len = msg.ReadInt32();
-                                var data = DeserializeBinary<VehicleData>(msg.ReadBytes(len)) as VehicleData;
+                                var data = ZeroFormatterSerializer.Deserialize<VehicleData>(msg.ReadBytes(len));
                                 if (data == null) return;
 
                                 lock (Opponents)
@@ -1341,7 +1341,7 @@ namespace GTACoOp
                         case PacketType.PedPositionData:
                             {
                                 var len = msg.ReadInt32();
-                                var data = DeserializeBinary<PedData>(msg.ReadBytes(len)) as PedData;
+                                var data = ZeroFormatterSerializer.Deserialize<PedData>(msg.ReadBytes(len));
                                 if (data == null) return;
 
                                 lock (Opponents)
@@ -1374,7 +1374,7 @@ namespace GTACoOp
                         case PacketType.NpcVehPositionData:
                             {
                                 var len = msg.ReadInt32();
-                                var data = DeserializeBinary<VehicleData>(msg.ReadBytes(len)) as VehicleData;
+                                var data = ZeroFormatterSerializer.Deserialize<VehicleData>(msg.ReadBytes(len));
                                 if (data == null) return;
 
                                 lock (Npcs)
@@ -1412,7 +1412,7 @@ namespace GTACoOp
                         case PacketType.NpcPedPositionData:
                             {
                                 var len = msg.ReadInt32();
-                                var data = DeserializeBinary<PedData>(msg.ReadBytes(len)) as PedData;
+                                var data = ZeroFormatterSerializer.Deserialize<PedData>(msg.ReadBytes(len));
                                 if (data == null) return;
 
                                 lock (Npcs)
@@ -1444,7 +1444,7 @@ namespace GTACoOp
                         case PacketType.ChatData:
                             {
                                 var len = msg.ReadInt32();
-                                var data = DeserializeBinary<ChatData>(msg.ReadBytes(len)) as ChatData;
+                                var data = ZeroFormatterSerializer.Deserialize<ChatData>(msg.ReadBytes(len));
                                 if (data != null && !string.IsNullOrEmpty(data.Message))
                                 {
                                     var sender = string.IsNullOrEmpty(data.Sender) ? "SERVER" : data.Sender;
@@ -1509,7 +1509,7 @@ namespace GTACoOp
                         case PacketType.PlayerDisconnect:
                             {
                                 var len = msg.ReadInt32();
-                                var data = DeserializeBinary<PlayerDisconnect>(msg.ReadBytes(len)) as PlayerDisconnect;
+                                var data = ZeroFormatterSerializer.Deserialize<PlayerDisconnect>(msg.ReadBytes(len));
                                 lock (Opponents)
                                 {
                                     if (data != null && Opponents.ContainsKey(data.Id))
@@ -1532,7 +1532,7 @@ namespace GTACoOp
                         case PacketType.WorldSharingStop:
                             {
                                 var len = msg.ReadInt32();
-                                var data = DeserializeBinary<PlayerDisconnect>(msg.ReadBytes(len)) as PlayerDisconnect;
+                                var data = ZeroFormatterSerializer.Deserialize<PlayerDisconnect>(msg.ReadBytes(len));
                                 if (data == null) return;
                                 lock (Npcs)
                                 {
@@ -1547,7 +1547,7 @@ namespace GTACoOp
                         case PacketType.NativeCall:
                             {
                                 var len = msg.ReadInt32();
-                                var data = (NativeData)DeserializeBinary<NativeData>(msg.ReadBytes(len));
+                                var data = ZeroFormatterSerializer.Deserialize<NativeData>(msg.ReadBytes(len));
                                 if (data == null) return;
                                 DecodeNativeCall(data);
                             }
@@ -1555,7 +1555,7 @@ namespace GTACoOp
                         case PacketType.NativeTick:
                             {
                                 var len = msg.ReadInt32();
-                                var data = (NativeTickCall)DeserializeBinary<NativeTickCall>(msg.ReadBytes(len));
+                                var data = ZeroFormatterSerializer.Deserialize<NativeTickCall>(msg.ReadBytes(len));
                                 if (data == null) return;
                                 lock (_tickNatives)
                                 {
@@ -1568,7 +1568,7 @@ namespace GTACoOp
                         case PacketType.NativeTickRecall:
                             {
                                 var len = msg.ReadInt32();
-                                var data = (NativeTickCall)DeserializeBinary<NativeTickCall>(msg.ReadBytes(len));
+                                var data = ZeroFormatterSerializer.Deserialize<NativeTickCall>(msg.ReadBytes(len));
                                 if (data == null) return;
                                 lock (_tickNatives) if (_tickNatives.ContainsKey(data.Identifier)) _tickNatives.Remove(data.Identifier);
                             }
@@ -1576,7 +1576,7 @@ namespace GTACoOp
                         case PacketType.NativeOnDisconnect:
                             {
                                 var len = msg.ReadInt32();
-                                var data = (NativeData)DeserializeBinary<NativeData>(msg.ReadBytes(len));
+                                var data = ZeroFormatterSerializer.Deserialize<NativeData>(msg.ReadBytes(len));
                                 if (data == null) return;
                                 lock (_dcNatives)
                                 {
@@ -1588,7 +1588,7 @@ namespace GTACoOp
                         case PacketType.NativeOnDisconnectRecall:
                             {
                                 var len = msg.ReadInt32();
-                                var data = (NativeData)DeserializeBinary<NativeData>(msg.ReadBytes(len));
+                                var data = ZeroFormatterSerializer.Deserialize<NativeData>(msg.ReadBytes(len));
                                 if (data == null) return;
                                 lock (_dcNatives) if (_dcNatives.ContainsKey(data.Id)) _dcNatives.Remove(data.Id);
                             }
@@ -1666,7 +1666,7 @@ namespace GTACoOp
                     var type = msg.ReadInt32();
                     var len = msg.ReadInt32();
                     var bin = msg.ReadBytes(len);
-                    var data = DeserializeBinary<DiscoveryResponse>(bin) as DiscoveryResponse;
+                    var data = ZeroFormatterSerializer.Deserialize<DiscoveryResponse>(bin);
                     if (data == null) return;
                     MaxMind.GeoIP2.Responses.CountryResponse geoIP; string _description;
                     try
@@ -1892,11 +1892,13 @@ namespace GTACoOp
                 {
                     list.Add(new InputArgument(Game.Player.Character.Handle));
                 }
+                // this is never sent from the server so...
+                /*
                 else if (arg is OpponentPedHandleArgument)
                 {
                     var handle = ((OpponentPedHandleArgument)arg).Data;
                     lock (Opponents) if (Opponents.ContainsKey(handle) && Opponents[handle].Character != null) list.Add(new InputArgument(Opponents[handle].Character.Handle));
-                }
+                }*/
                 else if (arg is Vector3Argument)
                 {
                     var tmp = (Vector3Argument)arg;
