@@ -19,6 +19,7 @@ using System.Text.RegularExpressions;
 using System.Globalization;
 using MaxMind.GeoIP2;
 using MaxMind.GeoIP2.Model;
+using ZeroFormatter;
 
 namespace GTACoOp
 {
@@ -135,7 +136,7 @@ namespace GTACoOp
                     {
                         Message = message,
                     };
-                    var data = SerializeBinary(obj);
+                    var data = ZeroFormatterSerializer.Serialize(obj);
 
                     var msg = _client.CreateMessage();
                     msg.Write((int)PacketType.ChatData);
@@ -357,7 +358,7 @@ namespace GTACoOp
                     var msg = _client.CreateMessage();
                     var obj = new PlayerDisconnect();
                     obj.Id = _client.UniqueIdentifier;
-                    var bin = SerializeBinary(obj);
+                    var bin = ZeroFormatterSerializer.Serialize(obj);
 
                     msg.Write((int)PacketType.WorldSharingStop);
                     msg.Write(bin.Length);
@@ -910,7 +911,7 @@ namespace GTACoOp
                 obj.VehicleMods = CheckPlayerVehicleMods();
                 obj.Speed = veh.Speed;
 
-                var bin = SerializeBinary(obj);
+                var bin = ZeroFormatterSerializer.Serialize(obj);
 
                 var msg = _client.CreateMessage();
                 msg.Write((int)PacketType.VehiclePositionData);
@@ -946,7 +947,7 @@ namespace GTACoOp
 
                 obj.PedProps = CheckPlayerProps();
 
-                var bin = SerializeBinary(obj);
+                var bin = ZeroFormatterSerializer.Serialize(obj);
 
                 var msg = _client.CreateMessage();
 
@@ -981,7 +982,7 @@ namespace GTACoOp
                 obj.Speed = veh.Speed;
                 obj.IsSirenActive = veh.SirenActive;
 
-                var bin = SerializeBinary(obj);
+                var bin = ZeroFormatterSerializer.Serialize(obj);
 
                 var msg = _client.CreateMessage();
                 msg.Write((int)PacketType.NpcVehPositionData);
@@ -1014,7 +1015,7 @@ namespace GTACoOp
                 obj.IsJumping = Function.Call<bool>(Hash.IS_PED_JUMPING, ped.Handle);
                 obj.IsParachuteOpen = Function.Call<int>(Hash.GET_PED_PARACHUTE_STATE, ped.Handle) == 2;
 
-                var bin = SerializeBinary(obj);
+                var bin = ZeroFormatterSerializer.Serialize(obj);
 
                 var msg = _client.CreateMessage();
 
@@ -1223,7 +1224,7 @@ namespace GTACoOp
                         {
                             Message = message,
                         };
-                        var data = SerializeBinary(obj);
+                        var data = ZeroFormatterSerializer.Serialize(obj);
 
                         var msg = _client.CreateMessage();
                         msg.Write((int)PacketType.ChatData);
@@ -1455,7 +1456,7 @@ namespace GTACoOp
                                             {
                                                 Message = "/login " + PlayerSettings.AutoLogin,
                                             };
-                                            var Data = SerializeBinary(obj);
+                                            var Data = ZeroFormatterSerializer.Serialize(obj);
 
                                             var Msg = _client.CreateMessage();
                                             Msg.Write((int)PacketType.ChatData);
@@ -1473,7 +1474,7 @@ namespace GTACoOp
                                             {
                                                 Message = "/register " + PlayerSettings.AutoLogin,
                                             };
-                                            var Data = SerializeBinary(obj);
+                                            var Data = ZeroFormatterSerializer.Serialize(obj);
 
                                             var Msg = _client.CreateMessage();
                                             Msg.Write((int)PacketType.ChatData);
@@ -2024,7 +2025,7 @@ namespace GTACoOp
             }
 
             var msg = _client.CreateMessage();
-            var bin = SerializeBinary(obj);
+            var bin = ZeroFormatterSerializer.Serialize(obj);
             msg.Write((int)PacketType.NativeResponse);
             msg.Write(bin.Length);
             msg.Write(bin);
