@@ -137,6 +137,7 @@ namespace GTACoOp
                         Message = message,
                     };
                     var data = ZeroFormatterSerializer.Serialize(obj);
+                    data = Lz4.CompressString(data);
 
                     var msg = _client.CreateMessage();
                     msg.Write((int)PacketType.ChatData);
@@ -359,7 +360,7 @@ namespace GTACoOp
                     var obj = new PlayerDisconnect();
                     obj.Id = _client.UniqueIdentifier;
                     var bin = ZeroFormatterSerializer.Serialize(obj);
-
+                    bin = Lz4.CompressString(bin);
                     msg.Write((int)PacketType.WorldSharingStop);
                     msg.Write(bin.Length);
                     msg.Write(bin);
@@ -912,7 +913,7 @@ namespace GTACoOp
                 obj.Speed = veh.Speed;
 
                 var bin = ZeroFormatterSerializer.Serialize(obj);
-
+                bin = Lz4.CompressString(bin);
                 var msg = _client.CreateMessage();
                 msg.Write((int)PacketType.VehiclePositionData);
                 msg.Write(bin.Length);
@@ -948,7 +949,7 @@ namespace GTACoOp
                 obj.PedProps = CheckPlayerProps();
 
                 var bin = ZeroFormatterSerializer.Serialize(obj);
-
+                bin = Lz4.CompressString(bin);
                 var msg = _client.CreateMessage();
 
                 msg.Write((int)PacketType.PedPositionData);
@@ -983,7 +984,7 @@ namespace GTACoOp
                 obj.IsSirenActive = veh.SirenActive;
 
                 var bin = ZeroFormatterSerializer.Serialize(obj);
-
+                bin = Lz4.CompressString(bin);
                 var msg = _client.CreateMessage();
                 msg.Write((int)PacketType.NpcVehPositionData);
                 msg.Write(bin.Length);
@@ -1016,7 +1017,7 @@ namespace GTACoOp
                 obj.IsParachuteOpen = Function.Call<int>(Hash.GET_PED_PARACHUTE_STATE, ped.Handle) == 2;
 
                 var bin = ZeroFormatterSerializer.Serialize(obj);
-
+                bin = Lz4.CompressString(bin);
                 var msg = _client.CreateMessage();
 
                 msg.Write((int)PacketType.NpcPedPositionData);
@@ -1225,7 +1226,7 @@ namespace GTACoOp
                             Message = message,
                         };
                         var data = ZeroFormatterSerializer.Serialize(obj);
-
+                        data = Lz4.CompressString(data);
                         var msg = _client.CreateMessage();
                         msg.Write((int)PacketType.ChatData);
                         msg.Write(data.Length);
@@ -1302,7 +1303,7 @@ namespace GTACoOp
                         case PacketType.VehiclePositionData:
                             {
                                 var len = msg.ReadInt32();
-                                var data = ZeroFormatterSerializer.Deserialize<VehicleData>(msg.ReadBytes(len));
+                                var data = ZeroFormatterSerializer.Deserialize<VehicleData>(Lz4.DecompressString(msg.ReadBytes(len)));
                                 if (data == null) return;
 
                                 lock (Opponents)
@@ -1341,7 +1342,7 @@ namespace GTACoOp
                         case PacketType.PedPositionData:
                             {
                                 var len = msg.ReadInt32();
-                                var data = ZeroFormatterSerializer.Deserialize<PedData>(msg.ReadBytes(len));
+                                var data = ZeroFormatterSerializer.Deserialize<PedData>(Lz4.DecompressString(msg.ReadBytes(len)));
                                 if (data == null) return;
 
                                 lock (Opponents)
@@ -1374,7 +1375,7 @@ namespace GTACoOp
                         case PacketType.NpcVehPositionData:
                             {
                                 var len = msg.ReadInt32();
-                                var data = ZeroFormatterSerializer.Deserialize<VehicleData>(msg.ReadBytes(len));
+                                var data = ZeroFormatterSerializer.Deserialize<VehicleData>(Lz4.DecompressString(msg.ReadBytes(len)));
                                 if (data == null) return;
 
                                 lock (Npcs)
@@ -1412,7 +1413,7 @@ namespace GTACoOp
                         case PacketType.NpcPedPositionData:
                             {
                                 var len = msg.ReadInt32();
-                                var data = ZeroFormatterSerializer.Deserialize<PedData>(msg.ReadBytes(len));
+                                var data = ZeroFormatterSerializer.Deserialize<PedData>(Lz4.DecompressString(msg.ReadBytes(len)));
                                 if (data == null) return;
 
                                 lock (Npcs)
@@ -1444,7 +1445,7 @@ namespace GTACoOp
                         case PacketType.ChatData:
                             {
                                 var len = msg.ReadInt32();
-                                var data = ZeroFormatterSerializer.Deserialize<ChatData>(msg.ReadBytes(len));
+                                var data = ZeroFormatterSerializer.Deserialize<ChatData>(Lz4.DecompressString(msg.ReadBytes(len)));
                                 if (data != null && !string.IsNullOrEmpty(data.Message))
                                 {
                                     var sender = string.IsNullOrEmpty(data.Sender) ? "SERVER" : data.Sender;
@@ -1457,7 +1458,7 @@ namespace GTACoOp
                                                 Message = "/login " + PlayerSettings.AutoLogin,
                                             };
                                             var Data = ZeroFormatterSerializer.Serialize(obj);
-
+                                            Data = Lz4.CompressString(Data);
                                             var Msg = _client.CreateMessage();
                                             Msg.Write((int)PacketType.ChatData);
                                             Msg.Write(Data.Length);
@@ -1475,7 +1476,7 @@ namespace GTACoOp
                                                 Message = "/register " + PlayerSettings.AutoLogin,
                                             };
                                             var Data = ZeroFormatterSerializer.Serialize(obj);
-
+                                            Data = Lz4.CompressString(Data);
                                             var Msg = _client.CreateMessage();
                                             Msg.Write((int)PacketType.ChatData);
                                             Msg.Write(Data.Length);
@@ -1509,7 +1510,7 @@ namespace GTACoOp
                         case PacketType.PlayerDisconnect:
                             {
                                 var len = msg.ReadInt32();
-                                var data = ZeroFormatterSerializer.Deserialize<PlayerDisconnect>(msg.ReadBytes(len));
+                                var data = ZeroFormatterSerializer.Deserialize<PlayerDisconnect>(Lz4.DecompressString(msg.ReadBytes(len)));
                                 lock (Opponents)
                                 {
                                     if (data != null && Opponents.ContainsKey(data.Id))
@@ -1532,7 +1533,7 @@ namespace GTACoOp
                         case PacketType.WorldSharingStop:
                             {
                                 var len = msg.ReadInt32();
-                                var data = ZeroFormatterSerializer.Deserialize<PlayerDisconnect>(msg.ReadBytes(len));
+                                var data = ZeroFormatterSerializer.Deserialize<PlayerDisconnect>(Lz4.DecompressString(msg.ReadBytes(len)));
                                 if (data == null) return;
                                 lock (Npcs)
                                 {
@@ -1547,7 +1548,7 @@ namespace GTACoOp
                         case PacketType.NativeCall:
                             {
                                 var len = msg.ReadInt32();
-                                var data = ZeroFormatterSerializer.Deserialize<NativeData>(msg.ReadBytes(len));
+                                var data = ZeroFormatterSerializer.Deserialize<NativeData>(Lz4.DecompressString(msg.ReadBytes(len)));
                                 if (data == null) return;
                                 DecodeNativeCall(data);
                             }
@@ -1555,7 +1556,7 @@ namespace GTACoOp
                         case PacketType.NativeTick:
                             {
                                 var len = msg.ReadInt32();
-                                var data = ZeroFormatterSerializer.Deserialize<NativeTickCall>(msg.ReadBytes(len));
+                                var data = ZeroFormatterSerializer.Deserialize<NativeTickCall>(Lz4.DecompressString(msg.ReadBytes(len)));
                                 if (data == null) return;
                                 lock (_tickNatives)
                                 {
@@ -1568,7 +1569,7 @@ namespace GTACoOp
                         case PacketType.NativeTickRecall:
                             {
                                 var len = msg.ReadInt32();
-                                var data = ZeroFormatterSerializer.Deserialize<NativeTickCall>(msg.ReadBytes(len));
+                                var data = ZeroFormatterSerializer.Deserialize<NativeTickCall>(Lz4.DecompressString(msg.ReadBytes(len)));
                                 if (data == null) return;
                                 lock (_tickNatives) if (_tickNatives.ContainsKey(data.Identifier)) _tickNatives.Remove(data.Identifier);
                             }
@@ -1576,7 +1577,7 @@ namespace GTACoOp
                         case PacketType.NativeOnDisconnect:
                             {
                                 var len = msg.ReadInt32();
-                                var data = ZeroFormatterSerializer.Deserialize<NativeData>(msg.ReadBytes(len));
+                                var data = ZeroFormatterSerializer.Deserialize<NativeData>(Lz4.DecompressString(msg.ReadBytes(len)));
                                 if (data == null) return;
                                 lock (_dcNatives)
                                 {
@@ -1588,7 +1589,7 @@ namespace GTACoOp
                         case PacketType.NativeOnDisconnectRecall:
                             {
                                 var len = msg.ReadInt32();
-                                var data = ZeroFormatterSerializer.Deserialize<NativeData>(msg.ReadBytes(len));
+                                var data = ZeroFormatterSerializer.Deserialize<NativeData>(Lz4.DecompressString(msg.ReadBytes(len)));
                                 if (data == null) return;
                                 lock (_dcNatives) if (_dcNatives.ContainsKey(data.Id)) _dcNatives.Remove(data.Id);
                             }
@@ -1666,7 +1667,7 @@ namespace GTACoOp
                     var type = msg.ReadInt32();
                     var len = msg.ReadInt32();
                     var bin = msg.ReadBytes(len);
-                    var data = ZeroFormatterSerializer.Deserialize<DiscoveryResponse>(bin);
+                    var data = ZeroFormatterSerializer.Deserialize<DiscoveryResponse>(Lz4.DecompressString(bin));
                     if (data == null) return;
                     MaxMind.GeoIP2.Responses.CountryResponse geoIP; string _description;
                     try
@@ -2028,6 +2029,7 @@ namespace GTACoOp
 
             var msg = _client.CreateMessage();
             var bin = ZeroFormatterSerializer.Serialize(obj);
+            bin = Lz4.CompressString(bin);
             msg.Write((int)PacketType.NativeResponse);
             msg.Write(bin.Length);
             msg.Write(bin);
