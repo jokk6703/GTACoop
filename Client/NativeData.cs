@@ -1,126 +1,123 @@
-﻿using System;
-using System.Collections.Generic;
-using ProtoBuf;
+﻿using System.Collections.Generic;
+using ZeroFormatter;
 
 namespace GTACoOp
 {
-    [ProtoContract]
+    [ZeroFormattable]
     public class NativeResponse
     {
-        [ProtoMember(1)]
-        public NativeArgument Response { get; set; }
-
-        [ProtoMember(2)]
-        public string Id { get; set; }
+        [Index(1)]
+        public virtual NativeArgument Response { get; set; }
+        [Index(2)]
+        public virtual string Id { get; set; }
     }
-
-    [ProtoContract]
+    [ZeroFormattable]
     public class NativeTickCall
     {
-        [ProtoMember(1)]
-        public NativeData Native { get; set; }
-
-        [ProtoMember(2)]
-        public string Identifier { get; set; }
+        [Index(1)]
+        public virtual NativeData Native { get; set; }
+        [Index(2)]
+        public virtual string Identifier { get; set; }
     }
-
-    [ProtoContract]
+    [ZeroFormattable]
     public class NativeData
     {
-        [ProtoMember(1)]
-        public ulong Hash { get; set; }
+        [Index(1)]
+        public virtual ulong Hash { get; set; }
+        [Index(2)]
+        public virtual List<NativeArgument> Arguments { get; set; }
+        [Index(3)]
+        public virtual NativeArgument ReturnType { get; set; }
+        [Index(4)]
+        public virtual string Id { get; set; }
 
-        [ProtoMember(2)]
-        public List<NativeArgument> Arguments { get; set; }
-
-        [ProtoMember(3)]
-        public NativeArgument ReturnType { get; set; }
-
-        [ProtoMember(4)]
-        public string Id { get; set; }
     }
-
-    [ProtoContract]
-    [ProtoInclude(2, typeof(IntArgument))]
-    [ProtoInclude(3, typeof(UIntArgument))]
-    [ProtoInclude(4, typeof(StringArgument))]
-    [ProtoInclude(5, typeof(FloatArgument))]
-    [ProtoInclude(6, typeof(BooleanArgument))]
-    [ProtoInclude(7, typeof(LocalPlayerArgument))]
-    [ProtoInclude(8, typeof(Vector3Argument))]
-    [ProtoInclude(9, typeof(LocalGamePlayerArgument))]
-    public class NativeArgument
+    public enum NativeType
     {
-        [ProtoMember(1)]
-        public string Id { get; set; }
+        IntArgument,
+        UIntArgument,
+        StringArgument,
+        FloatArgument,
+        BooleanArgument,
+        LocalPlayerArgument,
+        Vector3Argument,
+        LocalGamePlayerArgument
     }
 
-    [ProtoContract]
-    public class LocalPlayerArgument : NativeArgument
+    // TODO: Test this
+    [Union(typeof(IntArgument),
+        typeof(UIntArgument),
+        typeof(StringArgument),
+        typeof(FloatArgument),
+        typeof(BooleanArgument),
+        typeof(LocalPlayerArgument),
+        typeof(Vector3Argument),
+        typeof(LocalGamePlayerArgument))]
+    public abstract class NativeArgument
     {
+        [UnionKey]
+        public abstract NativeType Type { get; }
+
+        [Index(1)]
+        public virtual string Id { get; set; }
     }
 
-    [ProtoContract]
-    public class LocalGamePlayerArgument : NativeArgument
-    {
-    }
-
-    [ProtoContract]
-    public class OpponentPedHandleArgument : NativeArgument
-    {
-        public OpponentPedHandleArgument(long opponentHandle)
-        {
-            Data = opponentHandle;
-        }
-
-        [ProtoMember(1)]
-        public long Data { get; set; }
-    }
-
-    [ProtoContract]
+    [ZeroFormattable]
     public class IntArgument : NativeArgument
     {
-        [ProtoMember(1)]
-        public int Data { get; set; }
+        public override NativeType Type => NativeType.IntArgument;
+        [Index(2)]
+        public virtual int Data { get; set; }
     }
-
-    [ProtoContract]
+    [ZeroFormattable]
     public class UIntArgument : NativeArgument
     {
-        [ProtoMember(1)]
-        public uint Data { get; set; }
+        public override NativeType Type => NativeType.UIntArgument;
+        [Index(2)]
+        public virtual uint Data { get; set; }
     }
-
-    [ProtoContract]
+    [ZeroFormattable]
     public class StringArgument : NativeArgument
     {
-        [ProtoMember(1)]
-        public string Data { get; set; }
+        public override NativeType Type => NativeType.StringArgument;
+        [Index(2)]
+        public virtual string Data { get; set; }
     }
-
-    [ProtoContract]
+    [ZeroFormattable]
     public class FloatArgument : NativeArgument
     {
-        [ProtoMember(1)]
-        public float Data { get; set; }
+        public override NativeType Type => NativeType.FloatArgument;
+        [Index(2)]
+        public virtual float Data { get; set; }
     }
-
-    [ProtoContract]
+    [ZeroFormattable]
     public class BooleanArgument : NativeArgument
     {
-        [ProtoMember(1)]
-        public bool Data { get; set; }
+        public override NativeType Type => NativeType.BooleanArgument;
+        [Index(2)]
+        public virtual bool Data { get; set; }
+    }
+    [ZeroFormattable]
+    public class LocalPlayerArgument : NativeArgument
+    {
+        public override NativeType Type => NativeType.LocalPlayerArgument;
     }
 
-
-    [ProtoContract]
+    [ZeroFormattable]
     public class Vector3Argument : NativeArgument
     {
-        [ProtoMember(1)]
-        public float X { get; set; }
-        [ProtoMember(2)]
-        public float Y { get; set; }
-        [ProtoMember(3)]
-        public float Z { get; set; }
+        public override NativeType Type => NativeType.Vector3Argument;
+        [Index(2)]
+        public virtual float X { get; set; }
+        [Index(3)]
+        public virtual float Y { get; set; }
+        [Index(4)]
+        public virtual float Z { get; set; }
+    }
+
+    [ZeroFormattable]
+    public class LocalGamePlayerArgument : NativeArgument
+    {
+        public override NativeType Type => NativeType.LocalGamePlayerArgument;
     }
 }
