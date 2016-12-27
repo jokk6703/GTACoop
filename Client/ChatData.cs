@@ -1,15 +1,15 @@
-﻿using ProtoBuf;
+﻿using ZeroFormatter;
 
 namespace GTACoOp
 {
-    [ProtoContract]
+    [ZeroFormattable]
     public class ChatData
     {
-        [ProtoMember(1)]
-        public long Id { get; set; }
-        [ProtoMember(2)]
-        public string Sender { get; set; }
-        [ProtoMember(3)]
-        public string Message { get; set; }
+        [Index(1)]
+        public virtual long Id { get; set; }
+        [Index(2)]
+        public virtual string Sender { get; set; }
+        [Index(3)]
+        public virtual string Message { get; set; }
     }
 }

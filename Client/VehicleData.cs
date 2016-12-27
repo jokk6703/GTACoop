@@ -2,6 +2,7 @@
 using GTA.Math;
 using NativeUI;
 using ProtoBuf;
+using ZeroFormatter;
 
 namespace GTACoOp
 {
@@ -36,167 +37,168 @@ namespace GTACoOp
         VERSION_0_9_1 = 6,
         VERSION_0_9_2 = 7,
         VERSION_0_9_3 = 8,
+        VERSION_1_0_0 = 9
     }
 
-    [ProtoContract]
+    [ZeroFormattable]
     public class DiscoveryResponse
     {
-        [ProtoMember(1)]
-        public string ServerName { get; set; }
-        [ProtoMember(2)]
-        public int MaxPlayers { get; set; }
-        [ProtoMember(3)]
-        public int PlayerCount { get; set; }
-        [ProtoMember(4)]
-        public bool PasswordProtected { get; set; }
-        [ProtoMember(5)]
-        public int Port { get; set; }
-        [ProtoMember(6)]
-        public string Gamemode { get; set; }
+        [Index(1)]
+        public virtual string ServerName { get; set; }
+        [Index(2)]
+        public virtual int MaxPlayers { get; set; }
+        [Index(3)]
+        public virtual int PlayerCount { get; set; }
+        [Index(4)]
+        public virtual bool PasswordProtected { get; set; }
+        [Index(5)]
+        public virtual int Port { get; set; }
+        [Index(6)]
+        public virtual string Gamemode { get; set; }
     }
 
-    [ProtoContract]
+    [ZeroFormattable]
     public class ConnectionRequest
     {
-        [ProtoMember(1)]
-        public string Name { get; set; }
+        [Index(1)]
+        public virtual string Name { get; set; }
 
-        [ProtoMember(2)]
-        public string Password { get; set; }
+        [Index(2)]
+        public virtual string Password { get; set; }
 
-        [ProtoMember(3)]
-        public string DisplayName { get; set; }
+        [Index(3)]
+        public virtual string DisplayName { get; set; }
 
-        [ProtoMember(4)]
-        public int GameVersion { get; set; }
+        [Index(4)]
+        public virtual int GameVersion { get; set; }
 
-        [ProtoMember(5)]
-        public byte ScriptVersion { get; set; }
+        [Index(5)]
+        public virtual byte ScriptVersion { get; set; }
     }
 
-    [ProtoContract]
+    [ZeroFormattable]
     public class VehicleData
     {
-        [ProtoMember(1)]
-        public long Id { get; set; }
-        [ProtoMember(2)]
-        public string Name { get; set; }
+        [Index(1)]
+        public virtual long Id { get; set; }
+        [Index(2)]
+        public virtual string Name { get; set; }
 
-        [ProtoMember(3)]
-        public int VehicleModelHash { get; set; }
-        [ProtoMember(4)]
-        public int PedModelHash { get; set; }
-        [ProtoMember(5)]
-        public int PrimaryColor { get; set; }
-        [ProtoMember(6)]
-        public int SecondaryColor { get; set; }
+        [Index(3)]
+        public virtual int VehicleModelHash { get; set; }
+        [Index(4)]
+        public virtual int PedModelHash { get; set; }
+        [Index(5)]
+        public virtual int PrimaryColor { get; set; }
+        [Index(6)]
+        public virtual int SecondaryColor { get; set; }
 
-        [ProtoMember(7)]
-        public LVector3 Position { get; set; }
-        [ProtoMember(8)]
-        public LQuaternion Quaternion { get; set; }
+        [Index(7)]
+        public virtual LVector3 Position { get; set; }
+        [Index(8)]
+        public virtual LQuaternion Quaternion { get; set; }
 
-        [ProtoMember(9)]
-        public int VehicleSeat { get; set; }
+        [Index(9)]
+        public virtual int VehicleSeat { get; set; }
 
-        [ProtoMember(10)]
-        public int VehicleHealth { get; set; }
+        [Index(10)]
+        public virtual int VehicleHealth { get; set; }
 
-        [ProtoMember(11)]
-        public int PlayerHealth { get; set; }
+        [Index(11)]
+        public virtual int PlayerHealth { get; set; }
 
-        [ProtoMember(12)]
-        public float Latency { get; set; }
+        [Index(12)]
+        public virtual float Latency { get; set; }
 
-        [ProtoMember(13)]
-        public Dictionary<int, int> VehicleMods { get; set; }
+        [Index(13)]
+        public virtual Dictionary<int, int> VehicleMods { get; set; }
 
-        [ProtoMember(14)]
-        public bool IsPressingHorn { get; set; }
+        [Index(14)]
+        public virtual bool IsPressingHorn { get; set; }
 
-        [ProtoMember(15)]
-        public bool IsSirenActive { get; set; }
+        [Index(15)]
+        public virtual bool IsSirenActive { get; set; }
 
-        [ProtoMember(16)]
-        public float Speed { get; set; }
+        [Index(16)]
+        public virtual float Speed { get; set; }
     }
 
-    [ProtoContract]
+    [ZeroFormattable]
     public class PedData
     {
-        [ProtoMember(1)]
-        public long Id { get; set; }
-        [ProtoMember(2)]
-        public string Name { get; set; }
+        [Index(1)]
+        public virtual long Id { get; set; }
+        [Index(2)]
+        public virtual string Name { get; set; }
 
-        [ProtoMember(3)]
-        public int PedModelHash { get; set; }
+        [Index(3)]
+        public virtual int PedModelHash { get; set; }
 
-        [ProtoMember(4)]
-        public LVector3 Position { get; set; }
-        [ProtoMember(5)]
-        public LQuaternion Quaternion { get; set; }
+        [Index(4)]
+        public virtual LVector3 Position { get; set; }
+        [Index(5)]
+        public virtual LQuaternion Quaternion { get; set; }
 
-        [ProtoMember(6)]
-        public bool IsJumping { get; set; }
-        [ProtoMember(7)]
-        public bool IsShooting { get; set; }
-        [ProtoMember(8)]
-        public bool IsAiming { get; set; }
-        [ProtoMember(9)]
-        public LVector3 AimCoords { get; set; }
-        [ProtoMember(10)]
-        public int WeaponHash { get; set; }
+        [Index(6)]
+        public virtual bool IsJumping { get; set; }
+        [Index(7)]
+        public virtual bool IsShooting { get; set; }
+        [Index(8)]
+        public virtual bool IsAiming { get; set; }
+        [Index(9)]
+        public virtual LVector3 AimCoords { get; set; }
+        [Index(10)]
+        public virtual int WeaponHash { get; set; }
 
-        [ProtoMember(11)]
-        public int PlayerHealth { get; set; }
+        [Index(11)]
+        public virtual int PlayerHealth { get; set; }
 
-        [ProtoMember(12)]
-        public float Latency { get; set; }
+        [Index(12)]
+        public virtual float Latency { get; set; }
 
-        [ProtoMember(13)]
-        public Dictionary<int, int> PedProps { get; set; }
+        [Index(13)]
+        public virtual Dictionary<int, int> PedProps { get; set; }
 
-        [ProtoMember(14)]
-        public bool IsParachuteOpen { get; set; }
+        [Index(14)]
+        public virtual bool IsParachuteOpen { get; set; }
     }
 
-    [ProtoContract]
+    [ZeroFormattable]
     public class PlayerDisconnect
     {
-        [ProtoMember(1)]
-        public long Id { get; set; }
+        [Index(1)]
+        public virtual long Id { get; set; }
     }
     
-    [ProtoContract]
+    [ZeroFormattable]
     public class LVector3
     {
-        [ProtoMember(1)]
-        public float X { get; set; }
-        [ProtoMember(2)]
-        public float Y { get; set; }
-        [ProtoMember(3)]
-        public float Z { get; set; }
+        [Index(1)]
+        public virtual float X { get; set; }
+        [Index(2)]
+        public virtual float Y { get; set; }
+        [Index(3)]
+        public virtual float Z { get; set; }
 
-        public Vector3 ToVector()
+        public virtual Vector3 ToVector()
         {
             return new Vector3(X, Y, Z);
         }
     }
 
-    [ProtoContract]
+    [ZeroFormattable]
     public class LQuaternion
     {
-        [ProtoMember(1)]
-        public float X { get; set; }
-        [ProtoMember(2)]
-        public float Y { get; set; }
-        [ProtoMember(3)]
-        public float Z { get; set; }
-        [ProtoMember(4)]
-        public float W { get; set; }
+        [Index(1)]
+        public virtual float X { get; set; }
+        [Index(2)]
+        public virtual float Y { get; set; }
+        [Index(3)]
+        public virtual float Z { get; set; }
+        [Index(4)]
+        public virtual float W { get; set; }
 
-        public Quaternion ToQuaternion()
+        public virtual Quaternion ToQuaternion()
         {
             return new Quaternion(X, Y, Z, W);
         }
