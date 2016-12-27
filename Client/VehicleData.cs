@@ -57,23 +57,23 @@ namespace GTACoOp
         public virtual string Gamemode { get; set; }
     }
 
-    [ZeroFormattable]
-    public class ConnectionRequest
+    [ProtoContract]
+        public class ConnectionRequest
     {
-        [Index(1)]
-        public virtual string Name { get; set; }
+        [ProtoMember(1)]
+        public string Name { get; set; }
 
-        [Index(2)]
-        public virtual string Password { get; set; }
+        [ProtoMember(2)]
+        public string Password { get; set; }
 
-        [Index(3)]
-        public virtual string DisplayName { get; set; }
+        [ProtoMember(3)]
+        public string DisplayName { get; set; }
 
-        [Index(4)]
-        public virtual int GameVersion { get; set; }
+        [ProtoMember(4)]
+        public int GameVersion { get; set; }
 
-        [Index(5)]
-        public virtual byte ScriptVersion { get; set; }
+        [ProtoMember(5)]
+        public byte ScriptVersion { get; set; }
     }
 
     [ZeroFormattable]
