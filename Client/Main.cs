@@ -166,19 +166,19 @@ namespace GTACoOp
             // #warning Affects performance when open, drops from 80~100 on a GTX 980 to high 30s ~ 60
             _menuPool = new MenuPool();
 
-            _mainMenu = new UIMenu("Co-oP", "MAIN MENU");
-            _settingsMenu = new UIMenu("Co-oP", "CLIENT SETTINGS");
-            _serverBrowserMenu = new UIMenu("Co-oP", "SERVER BROWSER");
-            _playersMenu = new UIMenu("Co-oP", "PLAYER LIST");
+            _mainMenu = new UIMenu("Co-oP", "메인 메뉴");
+            _settingsMenu = new UIMenu("Co-oP", "클라이언트 설정");
+            _serverBrowserMenu = new UIMenu("Co-oP", "서버 브라우저");
+            _playersMenu = new UIMenu("Co-oP", "유저 ");
             //_serverMenu = new UIMenu("Co-oP", "SERVER SETTINGS");
             //_playerMenu = new UIMenu("Co-oP", "PLAYER OPTIONS");
 
-            var browserItem = new UIMenuItem("Server Browser");
+            var browserItem = new UIMenuItem("서버 브라우저");
             _mainMenu.BindMenuToItem(_serverBrowserMenu, browserItem);
             browserItem.Activated += (sender, item) => RebuildServerBrowser();
             _serverBrowserMenu.SetMenuWidthOffset(300);
 
-            var listenItem = new UIMenuItem("Server IP");
+            var listenItem = new UIMenuItem("서버 IP");
             listenItem.SetRightLabel(PlayerSettings.LastIP);
             listenItem.Activated += (menu, item) =>
             {
@@ -191,7 +191,7 @@ namespace GTACoOp
                 }
             };
 
-            var portItem = new UIMenuItem("Port");
+            var portItem = new UIMenuItem("포트");
             portItem.SetRightLabel(PlayerSettings.LastPort.ToString());
             portItem.Activated += (menu, item) =>
             {
@@ -199,7 +199,7 @@ namespace GTACoOp
                 int nPort; bool success = int.TryParse(newPort, out nPort);
                 if (!success)
                 {
-                    UI.Notify("Wrong port format.");
+                    UI.Notify("포트 유형이 잘못됐습니다.");
                     return;
                 }
                 Port = nPort;
@@ -208,7 +208,7 @@ namespace GTACoOp
                 portItem.SetRightLabel(nPort.ToString());
             };
             
-            var passItem = new UIMenuItem("Password");
+            var passItem = new UIMenuItem("비밀번호");
             if (PlayerSettings.HidePasswords)
             {
                 passItem.SetRightLabel(new String('*', PlayerSettings.LastPassword.Length));
@@ -235,7 +235,7 @@ namespace GTACoOp
                 }
             };
 
-            var connectItem = new UIMenuItem("Connect");
+            var connectItem = new UIMenuItem("접속");
             _clientIp = PlayerSettings.LastIP;
             connectItem.Activated += (sender, item) =>
             {
@@ -243,7 +243,7 @@ namespace GTACoOp
                 {
                     if (string.IsNullOrEmpty(_clientIp))
                     {
-                        UI.Notify("No IP adress specified.");
+                        UI.Notify("IP 주소가 없습니다.");
                         return;
                     }
 
@@ -251,28 +251,29 @@ namespace GTACoOp
                 }
                 else
                 {
-                    if (_client != null) _client.Disconnect("Connection closed by peer.");
+                    if (_client != null) _client.Disconnect("피어에 의해 연결이 닫혔습니다.");
                 }
             };
 
-            var settItem = new UIMenuItem("Client Settings");
+            var settItem = new UIMenuItem("클라이언트 설정");
             _mainMenu.BindMenuToItem(_settingsMenu, settItem);
 
             //var serverItem = new UIMenuItem("Server Settings");
             //_mainMenu.BindMenuToItem(_serverMenu, serverItem);
 
-            var playersItem = new UIMenuItem("Player List");
+            var playersItem = new UIMenuItem("플레이어 목록");
             _mainMenu.BindMenuToItem(_playersMenu, playersItem);
             playersItem.Activated += (sender, item) => RebuildPlayersList();
 
-            var aboutItem = new UIMenuItem("~g~GTA V~w~ Coop mod v" + ReadableScriptVersion() + " by ~b~Bluscream~w~.")
+            var aboutItem = new UIMenuItem("~g~GTA V~w~ 코옵모드 v" + ReadableScriptVersion() + " by ~b~Bluscream~w~.")
             {
                 Enabled = true
             };
             aboutItem.Activated += (sender, item) =>
             {
                 UI.Notify("GTA V Coop mod by Guad, temporary continued by Bluscream and wolfmitchell.");
-                UI.Notify("Mod Version: " + ReadableScriptVersion());
+                UI.Notify("모드 버전: " + ReadableScriptVersion());
+                UI.Notify("한글화: 린");
                 UI.Notify("https://pydio.studiowolfree.com/public/gtacoop");
             };
 
@@ -287,7 +288,7 @@ namespace GTACoOp
             _mainMenu.AddItem(aboutItem);
 
 
-            var nameItem = new UIMenuItem("Display Name");
+            var nameItem = new UIMenuItem("나타날 이름");
             nameItem.SetRightLabel(PlayerSettings.DisplayName);
             nameItem.Activated += (menu, item) =>
             {
@@ -300,7 +301,7 @@ namespace GTACoOp
                 }
             };
 
-            var masterItem = new UIMenuItem("Master Server");
+            var masterItem = new UIMenuItem("마스터 서버");
             masterItem.SetRightLabel(PlayerSettings.MasterServerAddress);
             masterItem.Activated += (menu, item) =>
             {
@@ -313,7 +314,7 @@ namespace GTACoOp
                 }
             };
 
-            var backupMasterItem = new UIMenuItem("Backup Master Server");
+            var backupMasterItem = new UIMenuItem("마스터 서버 백업");
             backupMasterItem.SetRightLabel(PlayerSettings.BackupMasterServerAddress);
             backupMasterItem.Activated += (menu, item) =>
             {
@@ -327,21 +328,21 @@ namespace GTACoOp
             };
 
 
-            var chatItem = new UIMenuCheckboxItem("Use Old Chat Input", PlayerSettings.OldChat);
+            var chatItem = new UIMenuCheckboxItem("예전 채팅키 사용", PlayerSettings.OldChat);
             chatItem.CheckboxEvent += (item, check) =>
             {
                 PlayerSettings.OldChat = check;
                 Util.SaveSettings(null);
             };
 
-            var chatLogItem = new UIMenuCheckboxItem("Log Chats", PlayerSettings.ChatLog);
+            var chatLogItem = new UIMenuCheckboxItem("채팅 로그", PlayerSettings.ChatLog);
             chatLogItem.CheckboxEvent += (item, check) =>
             {
                 PlayerSettings.ChatLog = check;
                 Util.SaveSettings(null);
             };
 
-            var hidePasswordsItem = new UIMenuCheckboxItem("Hide Passwords (Restart required)", PlayerSettings.HidePasswords);
+            var hidePasswordsItem = new UIMenuCheckboxItem("비밀번호 숨기기 (재시작 필요)", PlayerSettings.HidePasswords);
             hidePasswordsItem.CheckboxEvent += (item, check) =>
             {
                 PlayerSettings.HidePasswords = check;
@@ -390,13 +391,13 @@ namespace GTACoOp
                 Util.SaveSettings(null);
             };
 
-            var autoReconnectItem = new UIMenuCheckboxItem("Auto Reconnect", PlayerSettings.AutoReconnect);
+            var autoReconnectItem = new UIMenuCheckboxItem("자동 재접속", PlayerSettings.AutoReconnect);
             autoReconnectItem.CheckboxEvent += (item, check) =>
             {
                 PlayerSettings.AutoReconnect = check;
                 Util.SaveSettings(null);
             };
-            var autoLoginItem = new UIMenuItem("Auto Login");
+            var autoLoginItem = new UIMenuItem("자동 로그인");
             if (PlayerSettings.HidePasswords)
             {
                 autoLoginItem.SetRightLabel(new String('*', PlayerSettings.AutoLogin.Length));
@@ -423,7 +424,7 @@ namespace GTACoOp
                 }
             };
 
-            var autoRegisterItem = new UIMenuCheckboxItem("Auto Register", PlayerSettings.AutoRegister);
+            var autoRegisterItem = new UIMenuCheckboxItem("자동 가입", PlayerSettings.AutoRegister);
             autoRegisterItem.CheckboxEvent += (item, check) =>
             {
                 PlayerSettings.AutoRegister = check;
@@ -431,21 +432,21 @@ namespace GTACoOp
             };
 
 
-            var modeItem = new UIMenuListItem("Sync Mode", new List<dynamic>(Enum.GetNames(typeof(SynchronizationMode))), 0);
+            var modeItem = new UIMenuListItem("씽크 모드", new List<dynamic>(Enum.GetNames(typeof(SynchronizationMode))), 0);
             modeItem.OnListChanged += (item, index) =>
             {
                 GlobalSyncMode = Enum.Parse(typeof(SynchronizationMode), item.IndexToItem(index).ToString());
                 lock (Opponents) if (Opponents != null) Opponents.ToList().ForEach(p => p.Value.SyncMode = GlobalSyncMode);
             };
 
-            var versionItem = new UIMenuListItem("Version", new List<dynamic>(Enum.GetNames(typeof(ScriptVersion))), 0);
+            var versionItem = new UIMenuListItem("버전", new List<dynamic>(Enum.GetNames(typeof(ScriptVersion))), 0);
             versionItem.OnListChanged += (item, index) =>
             {
                 LocalScriptVersion = Enum.Parse(typeof(ScriptVersion), item.IndexToItem(index).ToString());
                 //_mainMenu.Clear();_mainMenu.RefreshIndex();
             };
 
-            var spawnItem = new UIMenuCheckboxItem("Debug", false);
+            var spawnItem = new UIMenuCheckboxItem("디버그", false);
             spawnItem.CheckboxEvent += (item, check) =>
             {
                 display = check;
@@ -477,7 +478,7 @@ namespace GTACoOp
             _settingsMenu.AddItem(spawnItem);
 
 
-            var serverNameItem = new UIMenuItem("Server Name");
+            var serverNameItem = new UIMenuItem("서버 이름");
             serverNameItem.SetRightLabel(ServerSettings.Name);
             serverNameItem.Activated += (menu, item) =>
             {
@@ -489,7 +490,7 @@ namespace GTACoOp
                 }
             };
 
-            var serverMaxPlayersItem = new UIMenuItem("Server Max Players");
+            var serverMaxPlayersItem = new UIMenuItem("서버 최대 플레이어 수");
             serverMaxPlayersItem.SetRightLabel(ServerSettings.MaxPlayers.ToString());
             serverMaxPlayersItem.Activated += (menu, item) =>
             {
@@ -498,7 +499,7 @@ namespace GTACoOp
                 bool success = int.TryParse(newPlayers, out nPlayers);
                 if (!success)
                 {
-                    UI.Notify("Wrong player number format");
+                    UI.Notify("잘못된 플레이어 유형");
                     return;
                 }
                 ServerSettings.MaxPlayers = nPlayers;
@@ -506,7 +507,7 @@ namespace GTACoOp
                 Util.SaveServerSettings(Program.Location + "ServerSettings.xml");
             };
 
-            var serverPortItem = new UIMenuItem("Server Port");
+            var serverPortItem = new UIMenuItem("서버 포트");
             serverPortItem.SetRightLabel(ServerSettings.Port.ToString());
             serverPortItem.Activated += (menu, item) =>
             {
@@ -515,7 +516,7 @@ namespace GTACoOp
                 bool success = int.TryParse(newPort, out nPort);
                 if (!success)
                 {
-                    UI.Notify("Wrong port format");
+                    UI.Notify("잘못된 포트 유형");
                     return;
                 }
                 ServerSettings.Port = nPort;
@@ -523,13 +524,13 @@ namespace GTACoOp
                 Util.SaveServerSettings(Program.Location + "ServerSettings.xml");
             };
 
-            var serverPasswordEnabledItem = new UIMenuCheckboxItem("Password enabled", ServerSettings.PasswordProtected);
+            var serverPasswordEnabledItem = new UIMenuCheckboxItem("비밀번호 활성화", ServerSettings.PasswordProtected);
             serverPasswordEnabledItem.CheckboxEvent += (item, check) =>
             {
                 ServerSettings.PasswordProtected = check;
             };
 
-            var serverPasswordTextItem = new UIMenuItem("Password");
+            var serverPasswordTextItem = new UIMenuItem("비밀번호");
             serverPasswordTextItem.Activated += (menu, item) =>
             {
                 string _input = Game.GetUserInput(255);
@@ -548,14 +549,14 @@ namespace GTACoOp
                 }
             };
 
-            var serverAnnounceItem = new UIMenuCheckboxItem("Announce to Master Server", ServerSettings.Announce);
+            var serverAnnounceItem = new UIMenuCheckboxItem("마스터 서버 공지", ServerSettings.Announce);
             serverAnnounceItem.CheckboxEvent += (item, check) =>
             {
                 ServerSettings.Announce = check;
                 Util.SaveServerSettings(Program.Location + "ServerSettings.xml");
             };
 
-            var serverMasterItem = new UIMenuItem("Master Server Adress");
+            var serverMasterItem = new UIMenuItem("마스터 서버 주소");
             serverMasterItem.SetRightLabel(ServerSettings.MasterServer);
             serverMasterItem.Activated += (menu, item) =>
             {
@@ -568,7 +569,7 @@ namespace GTACoOp
                 }
             };
 
-            var serverBackupMasterItem = new UIMenuItem("Backup Master Server");
+            var serverBackupMasterItem = new UIMenuItem("마스터 서버 백업");
             serverBackupMasterItem.SetRightLabel(ServerSettings.BackupMasterServer);
             serverBackupMasterItem.Activated += (menu, item) =>
             {
@@ -581,19 +582,19 @@ namespace GTACoOp
                 }
             };
 
-            var serverAllowDisplayNamesItem = new UIMenuCheckboxItem("Allow Nicknames", ServerSettings.AllowNickNames);
+            var serverAllowDisplayNamesItem = new UIMenuCheckboxItem("닉네임 활성화", ServerSettings.AllowNickNames);
             serverAllowDisplayNamesItem.CheckboxEvent += (item, check) =>
             {
                 ServerSettings.AllowNickNames = check;
                 Util.SaveServerSettings(Program.Location + "ServerSettings.xml");
             };
-            var serverAutoStartItem = new UIMenuCheckboxItem("Auto Start Server", PlayerSettings.AutoStartServer);
+            var serverAutoStartItem = new UIMenuCheckboxItem("서버 자동시작", PlayerSettings.AutoStartServer);
             serverAutoStartItem.CheckboxEvent += (item, check) =>
             {
                 PlayerSettings.AutoStartServer = check;
                 Util.SaveSettings(null);
             };
-            var serverStartItem = new UIMenuItem("Start Server");
+            var serverStartItem = new UIMenuItem("서버 시작");
             serverStartItem.Activated += (menu, item) =>
             {
                 if (!_serverRunning)
@@ -615,13 +616,19 @@ namespace GTACoOp
 
                     if (IsOnServer())
                     {
-                        if (_client != null) _client.Disconnect("Connecting to local server...");
+                        if (_client != null) _client.Disconnect("로컬 서버 접속중...");
                     }
                     _serverRunning = true;
                     //string[] filterscripts = new string[] { };
                     //try { Program.ServerInstance.Start(ServerSettings.Filterscripts); } catch(Exception ex) { UI.Notify("Can't start server: " +ex.Message); }
-                    try { ConnectToServer("localhost", ServerSettings.Port); } catch (Exception ex) { UI.Notify("Can't connect to local server: " + ex.Message); }
-                    UI.Notify("For others to access the server, you may have to port forward.");
+                    try {
+                        ConnectToServer("localhost", ServerSettings.Port);
+                    }
+                    
+                    catch (Exception ex) {
+                        UI.Notify("로컬 서버 접속 실패: " + ex.Message);
+                    }
+                    UI.Notify("다른 사람들이 접속하게 하기 위해선 포트포워딩 또는 DMZ 설정을 하여야 합니다.");
                 }
                 else
                 {
@@ -673,7 +680,7 @@ namespace GTACoOp
             #endregion
 
             _debug = new DebugWindow();
-            UI.Notify("~g~GTA V Coop mod v" + ReadableScriptVersion() + " by Guad, Bluscream and wolfmitchell loaded successfully.~w~");
+            UI.Notify("~g~GTA V 코옵모드 v" + ReadableScriptVersion() + " by Guad, Bluscream and wolfmitchell loaded successfully.~w~");
             if (PlayerSettings.AutoConnect && !String.IsNullOrWhiteSpace(PlayerSettings.LastIP) && PlayerSettings.LastPort != -1 && PlayerSettings.LastPort != 0) { 
                 ConnectToServer(PlayerSettings.LastIP.ToString(), PlayerSettings.LastPort);
             }else if(PlayerSettings.AutoStartServer){
@@ -692,7 +699,7 @@ namespace GTACoOp
 
                 if (IsOnServer())
                 {
-                    if (_client != null) _client.Disconnect("Connecting to local server...");
+                    if (_client != null) _client.Disconnect("로컬 서버 접속중..");
                 }
                 _serverRunning = true;
                 //string[] filterscripts = new string[] { };
@@ -718,12 +725,12 @@ namespace GTACoOp
             }
             catch (Exception e)
             {
-                UI.Notify("~r~~h~ERROR~h~~w~~n~Could not contact master server. Trying Fallback Server.");
+                UI.Notify("~r~~h~에러~h~~w~~n~마스터 서버를 접속하지 못함 Trying Fallback Server.");
                 if (Main.PlayerSettings.Logging)
                 {
-                    var logOutput = "===== EXCEPTION CONTACTING MASTER SERVER @ " + DateTime.UtcNow + " ======\n";
-                    logOutput += "Message: " + e.Message;
-                    logOutput += "\nData: " + e.Data;
+                    var logOutput = "===== 마스터 서버 접속하는 데 예외 발생 @ " + DateTime.UtcNow + " ======\n";
+                    logOutput += "메세지: " + e.Message;
+                    logOutput += "\n날짜: " + e.Data;
                     logOutput += "\nStack: " + e.StackTrace;
                     logOutput += "\nSource: " + e.Source;
                     logOutput += "\nTarget: " + e.TargetSite;
